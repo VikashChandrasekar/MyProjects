@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stocks</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            var HttpClient = function () {
+                this.get = function (aUrl, aCallback) {
+                    var anHttpRequest = new XMLHttpRequest();
+                    anHttpRequest.onreadystatechange = function () {
+                        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                            aCallback(anHttpRequest.responseText)
+                    }
+                    anHttpRequest.open("GET", "http://localhost:8080/api/stocks", true);
+                    anHttpRequest.send(null);
+                }
+            }
+            var theURL = "http://localhost:8080/api/stocks";
+            var client = new HttpClient();
+            client.get(theURL, function (response) {
+                var resposne1 = JSON.parse(response);
+                var stock_table = document.getElementById("stock_table");
+                stock_table.innerHTML += '<tr><td>Stock Id</td><td>Stock Name</td><td>Amount</td><td>Currency</td><td>Last Update</td></tr>'
+                for (var k in resposne1) {
+                    stock_table.innerHTML += '<tr><td>' + resposne1[k].id + '</td>' +
+                        '<td>' + resposne1[k].name + '</td>' +
+                        '<td>' + resposne1[k].currentPrice.amount + '</td>' +
+                        '<td>' + resposne1[k].currentPrice.currencyCode + '</td>' +
+                        '<td>' + resposne1[k].lastUpdate + '</td></tr>';
+                }
+            });
+
+
+            document.getElementById("submit").onclick = function fun() {
+                var stockId = document.forms["myForm"]["stockId"].value;
+                var theURL = "";
+                if (stockId == "") {
+                    theUrl = 'http://localhost:8080/api/stocks/';
+                } else {
+                    theUrl = 'http://localhost:8080/api/stocks/' + stockId;
+                }
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', theUrl, true);
+                xhr.send();
+                xhr.onreadystatechange = processRequest;
+
+                function processRequest(e) {
+                    stock_table.innerHTML = "";
+                    var newStock = document.getElementById("stock_table");
+                    newStock.innerHTML += '<tr><td>Stock Id</td><td>Stock Name</td><td>Amount</td><td>Currency</td><td>Last Update</td></tr>'
+                    var respons1 = JSON.parse(xhr.responseText);
+                    if (stockId != "" && xhr.status == 200) {
+
+                        newStock.innerHTML += '<tr><td>' + respons1.id + '</td>' +
+                            '<td>' + respons1.name + '</td>' +
+                            '<td>' + respons1.currentPrice.amount + '</td>' +
+                            '<td>' + respons1.currentPrice.currencyCode + '</td>' +
+                            '<td>' + respons1.lastUpdate + '</td></tr>';
+                        document.getElementById('errors').innerHTML = "";
+                    } else if (stockId == "" && xhr.status == 200) {
+                        for (var k in respons1) {
+                            newStock.innerHTML += '<tr><td>' + respons1[k].id + '</td>' +
+                                '<td>' + respons1[k].name + '</td>' +
+                                '<td>' + respons1[k].currentPrice.amount + '</td>' +
+                                '<td>' + respons1[k].currentPrice.currencyCode + '</td>' +
+                                '<td>' + respons1[k].lastUpdate + '</td></tr>';
+                        }
+                        document.getElementById('errors').innerHTML = "";
+                    } else {
+                        var newStock1 = document.getElementById("stock_table");
+                        newStock1.innerHTML = "";
+                        document.getElementById('errors').innerHTML = "*Record Not Found*";
+                        return false;
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<center>
+    Get the stocks information
+    <br><br>
+    <br>
+    <form name="myForm">
+        Enter the stock id :
+        <input type="text" name="stockId"/>
+        <input type="button" id="submit" value="Submit" onclick="f1()"/>
+    </form>
+
+    <center>
+        <br><br>
+        <table border=1 id="stock_table">
+
+        </table>
+        <div id="errors">
+        </div>
+
+    </center>
+</center>
+
+</body>
+</html>
