@@ -33,7 +33,6 @@ public class StockController {
 	@Autowired
 	private StockService stockService;
 
-
 	/**
 	 * This method returns all the list of stocks available
 	 *
@@ -43,8 +42,7 @@ public class StockController {
 	public List<Stock> findAllStocks() {
 		return stockService.findAllStocks();
 	}
-
-
+	
 	/**
 	 * This method helps us to get the single stock based on Id
 	 *
