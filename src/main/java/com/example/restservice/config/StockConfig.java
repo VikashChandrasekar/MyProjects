@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,11 +40,11 @@ public class StockConfig {
     public List<Stock> mapStockValues(){
         List<Stock> stockList = new ArrayList<>();
         Currency currency = Currency.getInstance("EUR");
-        Amount amount = new Amount(1500.0, currency);
-        Stock stock = new Stock(1, "Laptop", amount, new Timestamp(56));
+        Amount amount = new Amount(new BigDecimal(1500), currency);
+        Stock stock = new Stock(1, "Laptop", amount, new Timestamp(System.currentTimeMillis()));
         Currency currency1 = Currency.getInstance("EUR");
-        Amount amount1 = new Amount(700.0, currency1);
-        Stock stock1 = new Stock(2, "Mobile", amount1, new Timestamp(56));
+        Amount amount1 = new Amount(new BigDecimal(700), currency1);
+        Stock stock1 = new Stock(2, "Mobile", amount1, new Timestamp(System.currentTimeMillis()));
         stockList.add(stock);
         stockList.add(stock1);
         stockService.stocks = stockList;

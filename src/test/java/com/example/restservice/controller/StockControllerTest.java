@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class StockControllerTest {
 		Assert.assertEquals(2, stocks.get(1).getId());
 		Assert.assertEquals("Laptop", stocks.get(0).getName());
 		Assert.assertEquals("Mobile", stocks.get(1).getName());
-		Assert.assertEquals(1500.0, stocks.get(0).getCurrentPrice().getAmount(), 1500);
+		Assert.assertEquals(new BigDecimal(1500.0), stocks.get(0).getCurrentPrice().getAmount());
 	}
 
 	@Test
@@ -61,7 +62,7 @@ public class StockControllerTest {
 		stockService.stocks = stocks;
 		Stock stock = stockController.findStock(1);
 		Assert.assertEquals(1, stock.getId());
-		Assert.assertEquals(1500.0, stock.getCurrentPrice().getAmount(), 1500);
+		Assert.assertEquals(new BigDecimal(1500.0), stock.getCurrentPrice().getAmount());
 		Assert.assertEquals("Laptop", stock.getName());
 	}
 

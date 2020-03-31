@@ -42,7 +42,7 @@ public class StockController {
 	public List<Stock> findAllStocks() {
 		return stockService.findAllStocks();
 	}
-	
+
 	/**
 	 * This method helps us to get the single stock based on Id
 	 *
